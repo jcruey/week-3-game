@@ -1,0 +1,23 @@
+body {
+	background-image: url("../images/broken_noise.png");
+  	text-align: center;
+  	color: silver;
+}
+
+#newgamearea {
+  	margin-top: 2em;
+}
+#maskedWord {
+	padding: 1em;
+	font-size: 2em;
+}
+
+#lettersguessed, #wins {
+  	font-family: monospace;
+  	font-size: 2em;
+  	padding: 2em;
+}
+#wrapper {
+  	border: solid 1px silver;
+
+}
