@@ -65,12 +65,13 @@ updatePage: function() {
   // show the guesses the player has made
    if (guessCount == 0) {
     instructs.innerHTML = "You lose." + " The word was " + chosenWord;
-    lettersguessed.innerHTML = "<style>#lettersguessed { display: none; }</style>";
-    hideGuessed.innerHTML = "<style>#hideLetters { display: none; }</style>"    // game over (loss)
+    lettersguessed.innerHTML = "<style>#hideLetters { display: none; }</style>";
+    //hideGuessed.innerHTML = "<style>#hideLetters { display: none; }</style>";    // game over (loss)
   } else if (wordClue.indexOf("_") < 0) {
     wins++;
     instructs.innerHTML = "You win!!!"; // game over (win)
     winStats.innerHTML = wins;
+    lettersguessed.innerHTML = "<style>#hideLetters { display: none; }</style>";
   } else {
     guessArea.innerHTML = guessCount; 
     guessesRem.innerHTML = lettersGuessed; 
