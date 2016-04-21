@@ -1,29 +1,15 @@
-// constants
-var words = {
-  choices:['camera','background','abberation','noise', 'distortion', 'astigmatism', 'moire', 'focus', 'depth', 'aperture', 'shutter', 'lenses', 
-  'lighting', 'strobe', 'reflector', 'scrim', 'bracketing', 'dynamicrange', 'highlight', 'lowlight', 'midtone', 'bokeh', 'artifact', 'flare',
-  'gradient', 'filter', 'exposure', 'autofocus', 'lightmeter', 'backlit', 'backlighting', 'rimlighting', 'colortemperature', 'calibration'],
-  }
+// global variables
 var remainingGuesses = 12;           // number of total guesses per game
 var wins = 0;
-
-// global variables
 var chosenWord = "?";                // random word user is trying to guess
 var lettersGuessed = "";              // letters the player has guessed
 var guessCount = remainingGuesses;  // number of guesses player has left
 var maskedWord = document.getElementById("maskedWord");
 var winStats = document.querySelector("#wins");
 var guessArea = document.getElementById("lettersguessed");
-
-// Chooses a new random word and displays its clue on the page.
-function newGame() {
-  // choose a random word
-  var randomIndex = parseInt(Math.random() * words.choices.length);
-  chosenWord = words.choices[randomIndex];
-  guessCount = remainingGuesses;
-  lettersGuessed = "";
-  updatePage();   // show initial word clue - all underscores
-}
+var instructs = document.querySelector("#instructions");
+var guessesRem = document.getElementById("guessesremaining");
+var hideGuessed = document.getElementById("hideLetters");
 
 // Guesses a letter when the user presses a key.
 function guessLetter() {
@@ -38,11 +24,27 @@ function guessLetter() {
   if (chosenWord.indexOf(letter) < 0) {
     guessCount--;      // an incorrect guess
   }
-  updatePage();
+  words.updatePage();
 }
 }
+
+// constants
+var words = {
+  choices:['camera','background','abberation','noise', 'distortion', 'astigmatism', 'moire', 'focus', 'depth', 'aperture', 'shutter', 'lenses', 
+  'lighting', 'strobe', 'reflector', 'scrim', 'bracketing', 'dynamicrange', 'highlight', 'lowlight', 'midtone', 'bokeh', 'artifact', 'flare',
+  'gradient', 'filter', 'exposure', 'autofocus', 'lightmeter', 'backlit', 'backlighting', 'rimlighting', 'colortemperature', 'calibration'],
+  // Chooses a new random word and displays its clue on the page.
+    newGame: function() {
+  // choose a random word
+  var randomIndex = parseInt(Math.random() * words.choices.length);
+  chosenWord = words.choices[randomIndex];
+  guessCount = remainingGuesses;
+  lettersGuessed = "";
+  words.updatePage();   // show initial word clue - all underscores
+},
+
 // Updates the hangman image, word clue, etc. to the current game state.
-function updatePage() {
+updatePage: function() {
   
   // update clue string such as "h _ l l _ "
   var wordClue = "";
@@ -52,6 +54,8 @@ function updatePage() {
       wordClue += letter + " ";
     } else {                              // not guessed
       wordClue += "_ ";
+    //instructs.innerHTML ="Press any key to play"
+    winStats.innerHTML = wins;
     }
   }
   
@@ -60,17 +64,22 @@ function updatePage() {
   
   // show the guesses the player has made
    if (guessCount == 0) {
-    guessArea.innerHTML = "You lose.";    // game over (loss)
+    instructs.innerHTML = "You lose." + " The word was " + chosenWord;
+    lettersguessed.innerHTML = "<style>#lettersguessed { display: none; }</style>";
+    hideGuessed.innerHTML = "<style>#hideLetters { display: none; }</style>"    // game over (loss)
   } else if (wordClue.indexOf("_") < 0) {
-    guessArea.innerHTML = "You win!!!" && wins++; 
-    
-    winStats.innerHTML ="Wins: " + wins;    // game over (win)
+    wins++;
+    instructs.innerHTML = "You win!!!"; // game over (win)
+    winStats.innerHTML = wins;
   } else {
-    guessArea.innerHTML = "Guesses remaining: " + guessCount + "<br>" + "Guessed letters: " + lettersGuessed;
+    guessArea.innerHTML = guessCount; 
+    guessesRem.innerHTML = lettersGuessed; 
   }
   
 
   // update hangman image
   var image = document.getElementById("hangmanpic");
   image.src = "assets/images/hangman" + guessCount + ".gif";
+
+  }
 }

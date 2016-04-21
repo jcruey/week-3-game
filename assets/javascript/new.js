@@ -1,65 +1,78 @@
-// constants
-var words = {
-  choices:['captainamerica','batman','ironman','thor', 'spiderman', 'hulk', 'blackwidow', 'hawkeye'],
-  }
-var MAX_GUESSES = 12;           // number of total guesses per game
-
 // global variables
-var currentWord = "?";                // random word user is trying to guess
-var guesses = "";              // letters the player has guessed
-var guessCount = MAX_GUESSES;  // number of guesses player has left
+var chosenWord = "?";                // random word user is trying to guess
+var lettersGuessed = "";              // letters the player has guessed
+var remainingGuesses = 12;           // number of total guesses per game
+var guessCount = remainingGuesses;  // number of guesses player has left
+var maskedWord = document.getElementById("maskedWord");
+var winStats = document.querySelector("#wins");
+var guessArea = document.getElementById("lettersguessed");
+var instructs = document.getElementById("instructions");
+var wins = 0;
+var wordClue = "";
 
-// Chooses a new random word and displays its clue on the page.
-function newGame() {
-  // choose a random word
-  var currentWord = words.choices[Math.floor(Math.random() * words.choices.length)]
-  guessCount = MAX_GUESSES;
-  guesses = "";
-  updatePage();   // show initial word clue - all underscores
-}
-// Guesses a letter.  Called when the user presses a key.
-  document.onkeyup = function(event) {
-    var letterPicked = String.fromCharCode(event.keyCode).toLowerCase();
-    var clue = document.getElementById("clue");
-    console.log(letterPicked);
-    if (guessCount == 0 || clue.innerHTML.indexOf("_") < 0 ||
-      guesses.indexOf(letterPicked) >= 0) {
-      return;   // game is over, or already guessed this letter
-    guesses += letterPicked;
-    if (currentWord.indexOf(letterPicked) < 0) {
-    guessCount--;      // an incorrect guess
+    // Guesses a letter when the user presses a key.
+     function guessLetter() {
+       document.onkeyup = function(event) {
+          var letter = String.fromCharCode(event.keyCode).toLowerCase();
+        var maskedWord = document.getElementById("maskedWord");
+        if (guessCount == 0 || maskedWord.innerHTML.indexOf("_") < 0 ||
+            lettersGuessed.indexOf(letter) >= 0) {
+          return;   // game is over, or already guessed this letter
+        }
+        lettersGuessed += letter;
+        if (chosenWord.indexOf(letter) < 0) {
+          guessCount--;      // an incorrect guess
+        }
+        words.updatePage();
+    }
+   }
+
+
+// object with array of word choices and logic functions 
+var words = {
+  choices:['camera','background','abberation','noise', 'distortion', 'astigmatism', 'moire', 'focus', 'depth', 'aperture', 'shutter', 'lenses', 
+  'lighting', 'strobe', 'reflector', 'scrim', 'bracketing', 'dynamicrange', 'highlight', 'lowlight', 'midtone', 'bokeh', 'artifact', 'flare',
+  'gradient', 'filter', 'exposure', 'autofocus', 'lightmeter', 'backlit', 'backlighting', 'rimlighting', 'colortemperature', 'calibration'],
   
-}
-  updatePage();
-}}
+  // Chooses a new random word and displays its clue on the page
+  newGame: function() {
+  // choose a random word
+  var randomIndex = parseInt(Math.random() * words.choices.length);
+  chosenWord = words.choices[randomIndex];
+  guessCount = remainingGuesses;
+  lettersGuessed = "";
+  words.updatePage();   // show initial word clue - all underscores
+  instructs.innerHTML = "Press any key to play";
+  },
 
-// Updates the hangman image, word clue, etc. to the current game state.
-function updatePage() {
-  // update clue string such as "h _ l l _ "
-  var clueString = "";
-  for (var i = 0; i < currentWord.length; i++) {
-    var letterPicked = currentWord.charAt(i);
-    if (guesses.indexOf(letterPicked) >= 0) {   // letter has been guessed
-      clueString += letterPicked + " ";
-    } else {                              // not guessed
-      clueString += "_ ";
+  // Updates the hangman image, word clue, etc. to the current game state.
+    updatePage: function() {
+    // update wordClue string such as "h _ l l _ "
+    var wordClue = "";
+    for (var i = 0; i < chosenWord.length; i++) {
+      var letter = chosenWord.charAt(i);
+      if (lettersGuessed.indexOf(letter) >= 0) {   // letter has been guessed
+        wordClue += letter + " ";
+      } else {                              // not guessed
+        wordClue += "_ ";
+      }
+        maskedWord.innerHTML = wordClue;
+        guessArea.innerHTML = "Guesses remaining: " + guessCount + "<br>" + "Guessed letters: " + lettersGuessed;  
+      }
+  
+  // update hangman image
+  var image = document.getElementById("hangmanpic");
+  image.src = "assets/images/hangman" + guessCount + ".gif";
     }
   }
+// show the guesses letters the player has made and determine status of game and win statistics
+       if (guessCount == 0) {
+        guessArea.innerHTML = "You lose.";    // game over (loss)
+        alert("The word was: " + chosenWord);
+      } else if (wordClue.indexOf("_") < 0) {
+        guessArea.innerHTML = "You win!!!" && wins++; 
+        winStats.innerHTML ="Wins: " + wins;    // game over (win)
+      } else {
+        guessArea.innerHTML = "Guesses remaining: " + guessCount + "<br>" + "Guessed letters: " + lettersGuessed;
 
-  var clue = document.getElementById("clue");
-  clue.innerHTML = clueString;
-  
-  // show the guesses the player has made
-  var guessArea = document.getElementById("guesses");
-  if (guessCount == 0) {
-    guessArea.innerHTML = "You lose.";    // game over (loss)
-  } else if (clueString.indexOf("_") < 0) {
-    guessArea.innerHTML = "You win!!!";     // game over (win)
-  } else {
-    guessArea.innerHTML = "Guesses: " + guesses;
-  }
-
-  //update hangman image
-    //var image = document.getElementById("hangmanpic");
-    //image.src = "assets/images/hangman" + guessCount + ".gif";
-  }
+}
