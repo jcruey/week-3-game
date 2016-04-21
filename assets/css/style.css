@@ -4,25 +4,21 @@ body {
   	color: silver;
 }
 #hangmanpic {
-	position: relative;
-	top:	15px;
+	/*position: relative;
+	top:	55px;
 	right: 50px;
 	/*background-color: #000;*/
 }
 #newgamearea {
-	position: relative;
+	/*position: relative;
 	bottom: 100px;
-	float:left;
-  	margin-top: 2em;
+  	margin-top: 2em;*/
 }
 #maskedWord {
-	/*background-color: #ddd;*/
 	padding: 1em;
 	font-size: 2em;
 }
 #instructions {
-	/*float:left;
-	background-color: #ccc;*/
 	font-size: 15px;
 }
 #hideLetters {
@@ -42,20 +38,9 @@ body {
 
 }
 #newgame {
-	padding: 10px;
+
 }
-dt {
-	width:100%;
-	font-size: 15px; 
-	text-align: left;
-}
-dt:after {
-	content:':';
-}
-dd { 
-	font-size: 15px;
-}
-@media (min-width: 769px) {
+/*@media (min-width: 769px) {
 	dt {
 		position: relative;
 		left: 64px;
@@ -65,17 +50,14 @@ dd {
 	dt {
 		position: relative;
 		left: 64px;
-		float:left;
 		top: 40px;
 
-	}
+	}*/
 	#newgamearea {
-		position: relative;
-		bottom: 0px;
+
 	}
 	#instructions {
-		position: relative;
-		top: 40px;
+
 	}
 	}
 }
